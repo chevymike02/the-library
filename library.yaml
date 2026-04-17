@@ -149,7 +149,29 @@ library:
   prompts: []
 
 # FLINT extension — improvement queue (populated by /library audit)
-improvement_queue: []
+improvement_queue:
+  # Existing skills to improve (all never evaled — Finding D)
+  - { target: library, action: improve, reason: "never evaled", priority: medium }
+  - { target: wiki-compile, action: improve, reason: "never evaled", priority: medium }
+  - { target: wiki-ingest, action: improve, reason: "never evaled", priority: medium }
+  - { target: wiki-lint, action: improve, reason: "never evaled", priority: medium }
+  - { target: wiki-query, action: improve, reason: "never evaled", priority: medium }
+  - { target: wiki-search, action: improve, reason: "never evaled", priority: medium }
+  - { target: wiki-migrate, action: improve, reason: "never evaled", priority: medium }
+  - { target: analyze-video-frame, action: improve, reason: "never evaled", priority: medium }
+  - { target: android-emulator-skill, action: improve, reason: "never evaled", priority: medium }
+  - { target: wiki-keeper, action: improve, reason: "never evaled", priority: medium }
+  # New skills to create (Findings A + B)
+  - { target: gbp-oauth-bridge, action: create, reason: "GBP API blocked; unblocks gbp-manager", priority: high }
+  - { target: article-metrics-tracker, action: create, reason: "wrap existing tools/track-metrics.mjs", priority: high }
+  - { target: gbp-manager, action: create, reason: "weekly GBP ops for HEXIS", priority: high }
+  - { target: crawl4ai-orchestrator, action: create, reason: "$0/mo SerpAPI replacement on fleet", priority: high }
+  - { target: data-pipeline-enricher, action: create, reason: "directory-site 7-step enrichment", priority: high }
+  - { target: livekit-voice-agent, action: create, reason: "Hey FLINT voice stack", priority: medium }
+  - { target: directory-site-builder, action: create, reason: "programmatic SEO pages", priority: medium }
+  - { target: seo-qa-pipeline, action: create, reason: "content quality gate", priority: medium }
+  - { target: corepay-nmi-gateway, action: create, reason: "payments — blocked on LegitScript", priority: low }
+  - { target: prerender-orchestrator, action: create, reason: "AI crawler visibility for GEO", priority: low }
 
 # FLINT extension — skills-backlog pointer (populated by /library audit)
-skills_backlog_path: ~/Desktop/Flintv2/Brain/wiki/skills-backlog.md
+skills_backlog_path: C:\Users\chevy\Desktop\Flintv2\Brain\wiki\skills-backlog.md

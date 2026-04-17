@@ -1,3 +1,8 @@
+# FLINT Skill Library — forked from disler/the-library
+# Dan's schema preserved (name, description, source, requires).
+# FLINT extensions added as optional fields (agent_profiles, hermes_portable,
+#   eval, status, source_of_truth) — additive only, don't break Dan's cookbooks.
+
 default_dirs:
   skills:
     - default: .claude/skills/
@@ -10,6 +15,141 @@ default_dirs:
     - global: ~/.claude/commands/
 
 library:
-  skills: []
-  agents: []
+  skills:
+    - name: library
+      description: FLINT skill library meta-skill — catalogs, distributes, audits, and improves every skill. The one source of truth the FLINT harness reads for dynamic skill rotation.
+      source: ~/.claude/skills/library/SKILL.md
+      agent_profiles: [any]
+      hermes_portable: true
+      eval:
+        path: ~/.claude/skills/library/eval.json
+        last_score: null
+        last_run: null
+        criteria_count: null
+      status: ready
+      source_of_truth: runtime-only
+
+    - name: wiki-compile
+      description: Batch-compile every source in Brain/raw/ into topic-based articles in Brain/wiki/ using the 5-phase Karpathy LLM Wiki algorithm. Enforces wiki-keeper doctrine (source-precedence, citations, assertions, lint-gate).
+      source: ~/.claude/skills/wiki-compile/SKILL.md
+      requires: [skill:wiki-lint]
+      agent_profiles: [wiki-keeper]
+      hermes_portable: false
+      eval:
+        path: ~/.claude/skills/wiki-compile/eval.json
+        last_score: null
+        last_run: null
+        criteria_count: null
+      status: ready
+      source_of_truth: both
+
+    - name: wiki-ingest
+      description: Ingest a single source file into Brain/wiki/ with update-in-place discipline. Never creates foo-v2.md — always updates existing topic article. Enforces wiki-keeper doctrine.
+      source: ~/.claude/skills/wiki-ingest/SKILL.md
+      requires: [skill:wiki-lint]
+      agent_profiles: [wiki-keeper]
+      hermes_portable: false
+      eval:
+        path: ~/.claude/skills/wiki-ingest/eval.json
+        last_score: null
+        last_run: null
+        criteria_count: null
+      status: ready
+      source_of_truth: both
+
+    - name: wiki-lint
+      description: Run 7 health checks against compiled Brain wiki (stale, orphans, cross-refs, coverage, contradictions, schema drift, assertion verification). Never auto-fixes. Enforces wiki-keeper lint-gate.
+      source: ~/.claude/skills/wiki-lint/SKILL.md
+      agent_profiles: [any]
+      hermes_portable: true
+      eval:
+        path: ~/.claude/skills/wiki-lint/eval.json
+        last_score: null
+        last_run: null
+        criteria_count: null
+      status: ready
+      source_of_truth: both
+
+    - name: wiki-query
+      description: Answer synthesis-style questions by reading the compiled Brain wiki instead of scanning raw source files. Cites specific facts and sections. Canonical read path for FLINT agents.
+      source: ~/.claude/skills/wiki-query/SKILL.md
+      agent_profiles: [any]
+      hermes_portable: true
+      eval:
+        path: ~/.claude/skills/wiki-query/eval.json
+        last_score: null
+        last_run: null
+        criteria_count: null
+      status: ready
+      source_of_truth: both
+
+    - name: wiki-search
+      description: Keyword/phrase search across the compiled Brain wiki — two-tier (INDEX.md first, then grep across topic + concept articles). For exact-term lookup; prefer wiki-query for synthesis questions.
+      source: ~/.claude/skills/wiki-search/SKILL.md
+      agent_profiles: [any]
+      hermes_portable: true
+      eval:
+        path: ~/.claude/skills/wiki-search/eval.json
+        last_score: null
+        last_run: null
+        criteria_count: null
+      status: ready
+      source_of_truth: both
+
+    - name: wiki-migrate
+      description: One-time analysis + migration that takes a legacy vault (or existing startup file-read sequence) and maps it to the compiled Brain wiki. Requires at least one wiki-compile run first.
+      source: ~/.claude/skills/wiki-migrate/SKILL.md
+      requires: [skill:wiki-compile]
+      agent_profiles: [wiki-keeper]
+      hermes_portable: false
+      eval:
+        path: ~/.claude/skills/wiki-migrate/eval.json
+        last_score: null
+        last_run: null
+        criteria_count: null
+      status: ready
+      source_of_truth: both
+
+    - name: analyze-video-frame
+      description: Analyze a video frame image and produce comprehensive structured JSON context (scene, action, people with consistent IDs, objects with brands, environment, composition, color, editorial value, visible text).
+      source: ~/.claude/skills/analyze-video-frame/SKILL.md
+      agent_profiles: [video-ingest, video-editor]
+      hermes_portable: true
+      eval:
+        path: ~/.claude/skills/analyze-video-frame/eval.json
+        last_score: null
+        last_run: null
+        criteria_count: null
+      status: ready
+      source_of_truth: runtime-only
+
+    - name: android-emulator-skill
+      description: Production scripts for Android app testing, building, and automation — semantic UI navigation, build automation, accessibility testing, emulator lifecycle. Android equivalent of ios-simulator-skill.
+      source: ~/.claude/skills/android-emulator-skill/SKILL.md
+      agent_profiles: [android-dev, fitness-app]
+      hermes_portable: false
+      eval:
+        path: ~/.claude/skills/android-emulator-skill/eval.json
+        last_score: null
+        last_run: null
+        criteria_count: null
+      status: ready
+      source_of_truth: runtime-only
+
+  agents:
+    - name: wiki-keeper
+      description: Sole custodian of Brain/wiki/. Every Brain/wiki write goes through this agent. Enforces source-precedence, citation-per-claim, assertions.json companion, lint-gate, halt-on-ambiguity. Protected by 3 hook layers.
+      source: ~/.claude/agents/wiki-keeper.md
+      requires: [skill:wiki-compile, skill:wiki-ingest, skill:wiki-lint]
+      agent_profiles: [main-thread]
+      hermes_portable: false
+      status: ready
+      source_of_truth: runtime-only
+
   prompts: []
+
+# FLINT extension — improvement queue (populated by /library audit)
+improvement_queue: []
+
+# FLINT extension — skills-backlog pointer (populated by /library audit)
+skills_backlog_path: ~/Desktop/Flintv2/Brain/wiki/skills-backlog.md

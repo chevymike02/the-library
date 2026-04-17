@@ -12,9 +12,9 @@ A meta-skill for private-first distribution of agentics (skills, agents, and pro
 
 > Update these after forking and cloning the library repo.
 
-- **LIBRARY_REPO_URL**: `<your forked repo url>`
-- **LIBRARY_YAML_PATH**: `~/.claude/skills/library/library.yaml`
-- **LIBRARY_SKILL_DIR**: `~/.claude/skills/library/`
+- **LIBRARY_REPO_URL**: `https://github.com/chevymike02/the-library`
+- **LIBRARY_YAML_PATH**: `C:\Users\chevy\.claude\skills\library\library.yaml`
+- **LIBRARY_SKILL_DIR**: `C:\Users\chevy\.claude\skills\library\`
 
 ## How It Works
 
@@ -34,6 +34,8 @@ The Library is a catalog of references to your agentics. The `library.yaml` file
 | `/library list`             | Show full catalog with install status    |
 | `/library sync`             | Re-pull all installed items from source   |
 | `/library search <keyword>` | Find entries by keyword                  |
+| `/library audit`            | **[FLINT]** Scan Brain/wiki/ for skill gaps, propose new skills / improvements |
+| `/library improve <name>`   | **[FLINT]** Run Karpathy autoresearch loop on one skill (binary evals, mutate-one-thing, git reset on drops) |
 
 ## Cookbook
 
@@ -49,6 +51,8 @@ Each command has a detailed step-by-step guide. **Read the relevant cookbook fil
 | list    | [cookbook/list.md](cookbook/list.md)       | User wants to see what's available and what's installed      |
 | sync    | [cookbook/sync.md](cookbook/sync.md)       | User wants to refresh all installed items at once            |
 | search  | [cookbook/search.md](cookbook/search.md)   | User is looking for a skill but doesn't know the exact name |
+| audit   | [cookbook/audit.md](cookbook/audit.md)     | **[FLINT]** User wants to find skill gaps vs the Brain wiki, surface improvement candidates |
+| improve | [cookbook/improve.md](cookbook/improve.md) | **[FLINT]** User wants to run autoresearch improvement loop on one skill |
 
 **When a user invokes a `/library` command, read the matching cookbook file first, then execute the steps.**
 
